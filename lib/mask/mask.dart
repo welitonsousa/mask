@@ -8,6 +8,10 @@ class Mask {
     return GenericMask(mask: ['###.###.###-##']);
   }
 
+  static TextInputFormatter creditCard() {
+    return GenericMask(mask: ['##### ##### ##### #####']);
+  }
+
   static TextInputFormatter cnpj() {
     return GenericMask(mask: ['##.###.###/####-##']);
   }

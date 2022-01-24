@@ -12,18 +12,46 @@
  - Mask.validation.phone
  - Mask.validation.generic
  
-## examples
+## - Description
+Validations are for you to be able to simply validate your field
+
+<hr/>
+
+## - Masks
+
+ - Mask.creditCard
+ - Mask.cpf
+ - Mask.cnpj
+ - Mask.cpfOrCnpj
+ - Mask.money
+ - Mask.date
+ - Mask.phone
+ - Mask.generic
+ 
+## - Description
+The masks are for you to be able to customize your field, according to that information
+
+
+<hr/>
+
+## - Examples
 
 ```dart
-// cpf validation
+// cpf mask and validation
 TextFormField(
   validator: Mask.validations.cpf,
   inputFormatters: [Mask.cpf()],
 ),
 
-// your custom mask
+// cpf or cnpj mask and validation
 TextFormField(
-  validator: (value) => Mask.validations.generic(value, min:8, error: 'erro'),
+  validator: Mask.validations.cpfOrCnpj,
+  inputFormatters: [Mask.cpfOrCnpj()],
+),
+
+// your custom mask and validation
+TextFormField(
+  validator: (value) => Mask.validations.generic(value, min:8, error: 'info erro'),
   inputFormatters: [Mask.generic(masks: ['##-##-##'])],
 )
 ```

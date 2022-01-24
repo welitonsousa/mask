@@ -35,5 +35,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-  // R$ 10.00
 }
