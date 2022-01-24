@@ -1,9 +1,27 @@
 import 'dart:math';
-
 import 'modules/validation_cnpj.dart';
 import 'modules/validation_cpf.dart';
 
 class Validations {
+  /// use to validate cpf fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.cpf(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.cpf,
+  /// ),
+  /// ```
   String? cpf(String? value, {String error = 'CPF inválido'}) {
     String numbers = CPFValidator.strip(value ?? "");
     if (numbers.length != 11 || !CPFValidator.isValid(value ?? "")) {
@@ -11,6 +29,25 @@ class Validations {
     }
   }
 
+  /// use to validate cnpj fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.cnpj(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.cnpj,
+  /// ),
+  /// ```
   String? cnpj(String? value, {String error = 'CNPJ inválido'}) {
     String numbers = CNPJValidator.strip(value ?? "");
     if (numbers.length != 11 || !CNPJValidator.isValid(value ?? "")) {
@@ -18,6 +55,25 @@ class Validations {
     }
   }
 
+  /// use to validate cpfOrCnpj fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.cpfOrCnpj(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.cpfOrCnpj,
+  /// ),
+  /// ```
   String? cpfOrCnpj(
     String? value, {
     String errorCPF = 'CPF inválido',
@@ -28,6 +84,26 @@ class Validations {
     return response;
   }
 
+  /// use to validate money fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.money(
+  ///     value,
+  ///     min: 100.0, // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.money,
+  /// ),
+  /// ```
+
   String? money(
     String? value, {
     String error = 'Valor inválido',
@@ -35,19 +111,59 @@ class Validations {
     int decimalLenght = 2,
   }) {
     String formatted = (value ?? "").replaceAll(RegExp(r'\D'), '');
-    double money = double.parse(formatted) / pow(10, decimalLenght);
+    double moneyValue = double.tryParse(formatted) ?? 0;
+    double money = moneyValue / pow(10, decimalLenght);
 
     if (money < min) {
       return error;
     }
   }
 
+  /// use to validate email fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.email(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.email,
+  /// ),
+  /// ```
   String? email(String? value, {String error = 'Email inválido'}) {
     String emailRegex =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     if (!RegExp(emailRegex).hasMatch(value ?? "")) return error;
   }
 
+  /// use to validate generic fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.generic(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///     min: 8, // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.generic,
+  /// ),
+  /// ```
   String? generic(
     String? value, {
     String error = 'Campo invaído',
@@ -63,6 +179,27 @@ class Validations {
     return null;
   }
 
+  /// use to validate date fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.date(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///     min: DateTime('1999-01-01'), // optional field
+  ///     max: DateTime.now(), // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.date,
+  /// ),
+  /// ```
   String? date(
     String? value, {
     String error = 'Data inválida',

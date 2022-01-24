@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mask/mask.dart';
+import 'package:mask/mask/mask.dart';
 
 void main() => runApp(const MyApp());
 
@@ -27,8 +27,8 @@ class HomePage extends StatelessWidget {
           children: [
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: Mask.validations.cpf,
-              inputFormatters: [Mask.cpf()],
+              validator: (value) => Mask.validations.money(value, min: 100.0),
+              inputFormatters: [Mask.money()],
             ),
           ],
         ),
