@@ -15,7 +15,6 @@
 ## - Description
 Validations are for you to be able to simply validate your field
 
-<hr/>
 
 ## - Masks
 
@@ -32,15 +31,17 @@ Validations are for you to be able to simply validate your field
 The masks are for you to be able to customize your field, according to that information
 
 
-<hr/>
-
 ## - Examples
 
 ```dart
-// cpf mask and validation
+// money mask and validation
 TextFormField(
-  validator: Mask.validations.cpf,
-  inputFormatters: [Mask.cpf()],
+  autovalidateMode: AutovalidateMode.onUserInteraction,
+  validator: (value) => Mask.validations.money(
+    value, 
+    min: 100.0, // optional field
+  ),
+  inputFormatters: [Mask.money()],
 ),
 
 // cpf or cnpj mask and validation
@@ -52,6 +53,11 @@ TextFormField(
 // your custom mask and validation
 TextFormField(
   validator: (value) => Mask.validations.generic(value, min:8, error: 'info erro'),
-  inputFormatters: [Mask.generic(masks: ['##-##-##'])],
+  inputFormatters: [
+    Mask.generic(
+      masks: ['##-##-##'], 
+      hashtag: Hashtag.numbers, // optional field
+    ),
+  ),
 )
 ```

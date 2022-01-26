@@ -1,25 +1,32 @@
 import 'package:flutter/services.dart';
+import 'package:mask/models/hashtag_is.dart';
+
+String _expression({required Hashtag hashtag}) {
+  String response = '';
+  if (hashtag == Hashtag.letters) {
+    response = '[^a-zA-Z]';
+  } else if (hashtag == Hashtag.numbers) {
+    response = '[^0-9]';
+  } else if (hashtag == Hashtag.numbersAndLetters) {
+    response = '[^0-9a-zA-Z]';
+  }
+  return response;
+}
 
 class GenericMask extends TextInputFormatter {
   final List<String> mask;
-  final bool hasNumbers;
-  final bool hasLetters;
+  final Hashtag hashtag;
   int maskPosition = 0;
-  String _regexp = '';
 
   GenericMask({
     required this.mask,
-    this.hasLetters = false,
-    this.hasNumbers = true,
-  }) {
-    if (hasNumbers) _regexp += '0-9';
-    if (hasLetters) _regexp += 'a-zA-Z';
-    _regexp = '[^$_regexp]';
-  }
+    this.hashtag = Hashtag.numbers,
+  });
 
   @override
   TextEditingValue formatEditUpdate(oldValue, newValue) {
-    String value = newValue.text.replaceAll(RegExp(_regexp), '');
+    String value =
+        newValue.text.replaceAll(RegExp(_expression(hashtag: hashtag)), '');
     late String formatted;
 
     for (int i = 0; i < mask.length; i++) {

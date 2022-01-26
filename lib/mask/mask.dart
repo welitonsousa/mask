@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:mask/mask/generic_maks.dart';
 import 'package:mask/mask/money_mask.dart';
+import 'package:mask/models/hashtag_is.dart';
 import 'package:mask/validations/validations.dart';
 
 class Mask {
@@ -98,21 +99,18 @@ class Mask {
   ///   inputFormatters: [
   ///     Mask.generic(
   ///       masks: ['##-#', '###-#'] // use your custom masks
-  ///       hasNumbers: true, // optional field
-  ///       hasLetters: false, // optional field
+  ///       hashtag: Hashtag.numbers, // optional field
   ///     ),
   ///   ],
   /// ),
   /// ```
   static TextInputFormatter generic({
     required List<String> masks,
-    bool hasLetters = false,
-    hasNumbers = true,
+    Hashtag hashtag = Hashtag.numbers,
   }) {
     return GenericMask(
       mask: masks,
-      hasLetters: hasLetters,
-      hasNumbers: hasNumbers,
+      hashtag: hashtag,
     );
   }
 
