@@ -10,13 +10,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final editControlller = TextEditingController();
+
+  HomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +31,13 @@ class HomePage extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               validator: (value) => Mask.validations.money(value, min: 100.0),
               inputFormatters: [Mask.money()],
+            ),
+            TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (value) => Mask.validations.compare(
+                value,
+                compareTo: editControlller.text,
+              ),
             ),
           ],
         ),

@@ -210,17 +210,41 @@ class Validations {
       return error;
     } else {
       bool validate = true;
-      final dateString = value!.split('/').reversed.join('-');
-      DateTime date = DateTime.parse(dateString);
+      final dateString = value!.replaceAll(RegExp('[^0-9]'), '');
+      if (dateString.length == 8) {
+        DateTime date = DateTime.parse(dateString);
 
-      final values = value.split('/');
-      validate = validate && values[2] == '${date.year}'.padLeft(4, '0');
-      validate = validate && values[1] == '${date.month}'.padLeft(2, '0');
-      validate = validate && values[0] == '${date.day}'.padLeft(2, '0');
+        final values = value.split('/');
+        validate = validate && values[2] == '${date.year}'.padLeft(4, '0');
+        validate = validate && values[1] == '${date.month}'.padLeft(2, '0');
+        validate = validate && values[0] == '${date.day}'.padLeft(2, '0');
 
-      bool rangeMin = (min?.compareTo(date) ?? -2) >= 0;
-      bool rangeMax = (max?.compareTo(date) ?? 2) <= 0;
-      if (!validate || rangeMax || rangeMin) return error;
+        bool rangeMin = (min?.compareTo(date) ?? -2) >= 0;
+        bool rangeMax = (max?.compareTo(date) ?? 2) <= 0;
+        if (!validate || rangeMax || rangeMin) return error;
+      } else {
+        return error;
+      }
     }
+  }
+
+  /// use to validate tow fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.compare(
+  ///     value,
+  ///     compareTo: myTextEditingController.text,
+  ///     error: 'invalid confirmation' //optional field
+  ///   ),
+  /// ),
+  /// ```
+
+  String? compare(
+    String? value, {
+    String compareTo = '',
+    String error = 'Compo inváido',
+  }) {
+    if ((value?.trim().isEmpty ?? true) || value != compareTo) return error;
   }
 }
