@@ -63,7 +63,7 @@ TextFormField(
 ```
 
 ### screenshot - cpf validation example
-<img src="./assets/home.png" width="250" height="500"/>
+<img src="https://raw.githubusercontent.com/welitonsousa/mask/master/assets/home.png" width="250" height="500"/>
 
 <br>
 <br>
