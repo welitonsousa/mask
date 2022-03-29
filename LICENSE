@@ -6,8 +6,7 @@ Permission is granted, free of charge, to anyone who obtains a copy of this soft
 
 as long as you follow these conditions:
 - All work on this package must be Open Source;
-- All work on top of this package must contain a reference on top of the original package, the "native_auth"
-- All work on top of this package must have references from the author of the "native_auth" package, Weliton Sousa
+- All work on top of this package must have references from the author of the "Mask" package, Weliton Sousa
 
 The above copyright notice and this permission notice must be included in all. copies or substantial portions of the Software.
 
