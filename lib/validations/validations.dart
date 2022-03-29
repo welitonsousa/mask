@@ -27,6 +27,7 @@ class Validations {
     if (numbers.length != 11 || !CPFValidator.isValid(value ?? "")) {
       return error;
     }
+    return null;
   }
 
   /// use to validate cnpj fields
@@ -50,9 +51,10 @@ class Validations {
   /// ```
   String? cnpj(String? value, {String error = 'CNPJ inválido'}) {
     String numbers = CNPJValidator.strip(value ?? "");
-    if (numbers.length != 11 || !CNPJValidator.isValid(value ?? "")) {
+    if (numbers.length != 14 || !CNPJValidator.isValid(value ?? "")) {
       return error;
     }
+    return null;
   }
 
   /// use to validate cpfOrCnpj fields
@@ -108,15 +110,14 @@ class Validations {
     String? value, {
     String error = 'Valor inválido',
     double min = 1,
-    int decimalLenght = 2,
+    int decimalLength = 2,
   }) {
     String formatted = (value ?? "").replaceAll(RegExp(r'\D'), '');
     double moneyValue = double.tryParse(formatted) ?? 0;
-    double money = moneyValue / pow(10, decimalLenght);
+    double money = moneyValue / pow(10, decimalLength);
 
-    if (money < min) {
-      return error;
-    }
+    if (money < min) return error;
+    return null;
   }
 
   /// use to validate email fields
@@ -142,6 +143,7 @@ class Validations {
     String emailRegex =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     if (!RegExp(emailRegex).hasMatch(value ?? "")) return error;
+    return null;
   }
 
   /// use to validate generic fields
@@ -166,7 +168,7 @@ class Validations {
   /// ```
   String? generic(
     String? value, {
-    String error = 'Campo invaído',
+    String error = 'Campo inválido',
     int min = 1,
   }) {
     if ((value ?? "").trim().length < min) return error;
@@ -226,9 +228,10 @@ class Validations {
         return error;
       }
     }
+    return null;
   }
 
-  /// use to validate tow fields
+  /// compare two fields such as password and password confirmation
   /// ```dart
   /// TextFormField(
   ///   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -243,8 +246,32 @@ class Validations {
   String? compare(
     String? value, {
     String compareTo = '',
-    String error = 'Compo inváido',
+    String error = 'Compo inválido',
   }) {
     if ((value?.trim().isEmpty ?? true) || value != compareTo) return error;
+    return null;
+  }
+
+  /// use to apply multiple validations
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   controller: editController,
+  ///   validator: (value) => Mask.validations.multiple(
+  ///     validations: [
+  ///       Mask.validations.generic(value, min: 4, error: 'min 4'),
+  ///       Mask.validations.email(value, error: 'email inválido'),
+  ///     ],
+  ///   ),
+  /// ),
+  /// ```
+
+  String? multiple({
+    required List<String?> validations,
+  }) {
+    for (var validation in validations) {
+      if (validation != null) return validation;
+    }
+    return null;
   }
 }

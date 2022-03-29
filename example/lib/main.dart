@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  final editControlller = TextEditingController();
+  final editController = TextEditingController();
 
   HomePage({Key? key}) : super(key: key);
   @override
@@ -29,15 +29,9 @@ class HomePage extends StatelessWidget {
           children: [
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) => Mask.validations.money(value, min: 100.0),
-              inputFormatters: [Mask.money()],
-            ),
-            TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (value) => Mask.validations.compare(
-                value,
-                compareTo: editControlller.text,
-              ),
+              validator: (value) => Mask.validations.cpf(value),
+              inputFormatters: [Mask.cpf()],
+              decoration: const InputDecoration(labelText: 'CPF'),
             ),
           ],
         ),
