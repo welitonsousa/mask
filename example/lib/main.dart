@@ -33,6 +33,10 @@ class HomePage extends StatelessWidget {
               inputFormatters: [Mask.cpf()],
               decoration: const InputDecoration(labelText: 'CPF'),
             ),
+            TextFormField(
+              inputFormatters: [Mask.phone()],
+              decoration: const InputDecoration(labelText: 'TElefone'),
+            ),
           ],
         ),
       ),

@@ -37,6 +37,10 @@ class GenericMask extends TextInputFormatter {
       }
     }
     formatted = mask[maskPosition];
+
+    if (oldValue.text.length > newValue.text.length) {
+      formatted = newValue.text;
+    }
     for (var i = 0; i < value.length; i++) {
       formatted = formatted.replaceFirst('#', value[i]);
     }
