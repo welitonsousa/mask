@@ -1,3 +1,13 @@
+## 1.0.4
+
+* Bug correction
+
+
+## 1.0.3
+
+* Bug correction
+
+
 ## 1.0.2
 
 * Add multiple validations.
@@ -7,7 +17,6 @@
 ## 1.0.1
 
 * TODO: generic mask controller all characters.
-
 
 ## 1.0.0
 
