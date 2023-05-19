@@ -8,6 +8,8 @@
  - Mask.validation.email
  - Mask.validation.money
  - Mask.validation.date
+ - Mask.validation.dateTime
+ - Mask.validation.time
  - Mask.validation.money
  - Mask.validation.phone
  - Mask.validation.generic
@@ -68,6 +70,6 @@ TextFormField(
 <br>
 <br>
 <p align="center">
-   Feito com ❤️ by <b>Weliton Sousa</b>
+   Feito com ❤️ by <a target="_blank" href="https://welitonsousa.shop"><b>Weliton Sousa</b></a>
 </p>
 

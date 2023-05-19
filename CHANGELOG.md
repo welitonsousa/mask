@@ -1,3 +1,10 @@
+## 1.0.5
+
+* Bug correction
+* add validation of time
+* add validation of dateTime
+
+
 ## 1.0.4
 
 * Bug correction

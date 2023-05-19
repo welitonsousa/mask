@@ -1,4 +1,7 @@
-import 'dart:math';
+import 'dart:math' as mat;
+
+import 'package:flutter/material.dart';
+
 import 'modules/validation_cnpj.dart';
 import 'modules/validation_cpf.dart';
 
@@ -114,7 +117,7 @@ class Validations {
   }) {
     String formatted = (value ?? "").replaceAll(RegExp(r'\D'), '');
     double moneyValue = double.tryParse(formatted) ?? 0;
-    double money = moneyValue / pow(10, decimalLength);
+    double money = moneyValue / mat.pow(10, decimalLength);
 
     if (money < min) return error;
     return null;
@@ -188,7 +191,7 @@ class Validations {
   ///   validator: (value) => Mask.validations.date(
   ///     value,
   ///     error: 'your message error', // optional field
-  ///     min: DateTime('1999-01-01'), // optional field
+  ///     min: DateTime.parse('1999-01-01'), // optional field
   ///     max: DateTime.now(), // optional field
   ///   ),
   /// ),
@@ -208,26 +211,144 @@ class Validations {
     DateTime? min,
     DateTime? max,
   }) {
-    if (value?.length != 10) {
-      return error;
-    } else {
-      bool validate = true;
-      final dateString = value!.replaceAll(RegExp('[^0-9]'), '');
-      if (dateString.length == 8) {
-        DateTime date = DateTime.parse(dateString);
+    if (value?.trim().length != 10) return error;
 
-        final values = value.split('/');
-        validate = validate && values[2] == '${date.year}'.padLeft(4, '0');
-        validate = validate && values[1] == '${date.month}'.padLeft(2, '0');
-        validate = validate && values[0] == '${date.day}'.padLeft(2, '0');
+    final str = value!.replaceAll(RegExp(r'[0-9]'), '');
+    if (str.length != 2) return error;
+    if (str[0] != str[1]) return error;
+    if (str[0] != '/' && str[0] != '-') return error;
 
-        bool rangeMin = (min?.compareTo(date) ?? -2) >= 0;
-        bool rangeMax = (max?.compareTo(date) ?? 2) <= 0;
-        if (!validate || rangeMax || rangeMin) return error;
-      } else {
-        return error;
-      }
+    final special = str[0];
+    final dateInt = value.split(special).map(int.parse).toList();
+
+    final year = '${mat.max(dateInt[0], dateInt[2])}'.padLeft(4, '0');
+    final month = '${dateInt[1]}'.padLeft(2, '0');
+    final day = '${mat.min(dateInt[0], dateInt[2])}'.padLeft(2, '0');
+
+    final date = DateTime.tryParse('$year$month$day');
+    if (date == null) return error;
+
+    final rangeMin = (min?.compareTo(date) ?? -2) >= 0;
+    final rangeMax = (max?.compareTo(date) ?? 2) <= 0;
+    if (rangeMax && max != null) return error;
+    if (rangeMin && min != null) return error;
+
+    return null;
+  }
+
+  /// use to validate time fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.time(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///     min: TimeOfDay(hour: 8, minute: 0), // optional field
+  ///     max: TimeOfDay(hour: 18, minute: 0), // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.time,
+  /// ),
+  /// ```
+  String? time(
+    String? value, {
+    String error = 'Horário inválido',
+    TimeOfDay? min,
+    TimeOfDay? max,
+  }) {
+    final time = (value ?? '').split(':');
+
+    if (time.length != 2) return error;
+    final hours = int.tryParse(time[0]);
+    final minutes = int.tryParse(time[1]);
+
+    if (minutes == null || hours == null) return error;
+    if (minutes < 0 || minutes > 59) return error;
+    if (hours < 0 || hours > 23) return error;
+
+    if (min != null) {
+      if (hours < min.hour) return error;
+      if (hours == min.hour && minutes < min.minute) return error;
     }
+    if (max != null) {
+      if (hours > max.hour) return error;
+      if (hours == max.hour && minutes > max.minute) return error;
+    }
+    return null;
+  }
+
+  /// use to validate dateTime fields
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: (value) => Mask.validations.dateTime(
+  ///     value,
+  ///     error: 'your message error', // optional field
+  ///     min: DateTime.parse('1999-01-01 08:00'), // optional field
+  ///     max: DateTime.parse('1999-01-01 18:00'), // optional field
+  ///     timeWithSeconds: false, // optional field
+  ///   ),
+  /// ),
+  /// ```
+  ///
+  ///------------   or   ------------
+  ///
+  /// ```dart
+  /// TextFormField(
+  ///   autovalidateMode: AutovalidateMode.onUserInteraction,
+  ///   validator: Mask.validations.dateTime,
+  /// ),
+  /// ```
+  String? dateTime(
+    String? value, {
+    String error = 'Data inválida',
+    DateTime? min,
+    DateTime? max,
+    bool timeWithSeconds = false,
+  }) {
+    final values = (value ?? "").split(' ');
+    if (values.length != 2) return error;
+    final dateSTR = values[0];
+    final timeSTR = values[1];
+
+    if (dateSTR.trim().length != 10) return error;
+
+    if (timeWithSeconds) {
+      if (timeSTR.trim().length != 8) return error;
+    } else {
+      if (timeSTR.trim().length != 5) return error;
+    }
+    final time = DateTime.tryParse('0000-00-00 $timeSTR');
+    if (time == null) return error;
+
+    final str = dateSTR.replaceAll(RegExp(r'[0-9]'), '');
+    if (str.length != 2) return error;
+    if (str[0] != str[1]) return error;
+    if (str[0] != '/' && str[0] != '-') return error;
+
+    final special = str[0];
+    final dateInt = dateSTR.split(special).map(int.parse).toList();
+
+    final year = '${mat.max(dateInt[0], dateInt[2])}'.padLeft(4, '0');
+    final month = '${dateInt[1]}'.padLeft(2, '0');
+    final day = '${mat.min(dateInt[0], dateInt[2])}'.padLeft(2, '0');
+
+    final date = DateTime.tryParse(
+        '$year$month$day ${time.hour}:${time.minute}:${time.second}');
+    if (date == null) return error;
+
+    final rangeMin = (min?.compareTo(date) ?? -2) >= 0;
+    final rangeMax = (max?.compareTo(date) ?? 2) <= 0;
+    if (rangeMax && max != null) return error;
+    if (rangeMin && min != null) return error;
+
     return null;
   }
 
